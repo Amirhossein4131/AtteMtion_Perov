@@ -1,0 +1,46 @@
+hydra:
+  run:
+    dir: ${oc.env:PROJECT_ROOT}/hydra/regression/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    #dir: ${oc.env:PROJECT_ROOT}/hydra/forloading
+
+trainer:
+  max_epochs: 5000
+  accelerator: "cpu"
+  devices: 1
+
+
+model:
+  _target_: pl_modules.modules.direct_prediction.GraphFeaturePredictor
+  pool: null
+  gnn:
+    _target_: pl_modules.imports.dimenet.model.DimeNetPlusPlusWrap
+    num_targets: 1
+    hidden_channels: 128
+    num_blocks: 4
+    int_emb_size: 64
+    basis_emb_size: 8
+    out_emb_channels: 256
+    num_spherical: 7
+    num_radial: 6
+    otf_graph: True
+    cutoff: 10.0
+    max_num_neighbors: 20
+    envelope_exponent: 5
+    num_before_skip: 1
+    num_after_skip: 2
+    num_output_layers: 3
+  readout: null
+  optimizer_cfg:
+    lr: 0.001
+    step_size: 1000
+    gamma: 0.5
+
+datamodule:
+  _target_: pl_modules.data.dimenet_data.DimeNetDataModule
+  train_csv: ${oc.env:PROJECT_ROOT}/data/GSFE2/dataset.csv
+  test_csv: ${oc.env:PROJECT_ROOT}/data/GSFE2/dataset.csv
+  elements: ${oc.env:PROJECT_ROOT}/data/GSFE2/elements.json
+  separate_test: False
+  batch_size: 16
+  label_scaler:
+    _target_: sklearn.preprocessing.StandardScaler
