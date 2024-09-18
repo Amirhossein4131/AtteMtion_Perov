@@ -24,7 +24,7 @@ class DimeNetDataModule(pl.LightningDataModule):
             self.elements = json.load(file)
 
         self.train = self.getdb(self, train_csv)
-        self.train_dataset = self.train[1000:]
+        self.train_dataset = self.train[1000:2000]
         self.test_dataset = self.train[:1000]
 
         # if separate_test:
@@ -48,13 +48,13 @@ class DimeNetDataModule(pl.LightningDataModule):
             lines = cif.strip().split('\n')
 
             # target (y)
-            prop = data['energy'][i]
+            prop = data['dir_gap'][i]
 
             # fractional coordinates
-            frac_cords = np.array([line.split()[3:-1] for line in lines[25:]], dtype=float)
+            frac_cords = np.array([line.split()[3:-1] for line in lines[26:]], dtype=float)
 
             # atom types and number of atoms
-            atom_types = [self.elements[line.split()[0]] for line in lines[25:]]
+            atom_types = [self.elements[line.split()[0]] for line in lines[26:]]
             num_atoms = len(atom_types)
 
             # Angles

@@ -5,8 +5,8 @@ hydra:
 
 trainer:
   max_epochs: 5000
-  accelerator: "cpu"
-  devices: 1
+  #accelerator: "cpu"
+  #devices: 1
 
 
 model:
@@ -37,10 +37,10 @@ model:
 
 datamodule:
   _target_: pl_modules.data.dimenet_data.DimeNetDataModule
-  train_csv: ${oc.env:PROJECT_ROOT}/data/GSFE2/dataset.csv
-  test_csv: ${oc.env:PROJECT_ROOT}/data/GSFE2/dataset.csv
-  elements: ${oc.env:PROJECT_ROOT}/data/GSFE2/elements.json
+  train_csv: ${oc.env:PROJECT_ROOT}/data/perov/train.csv
+  test_csv: ${oc.env:PROJECT_ROOT}/data/perov/train.csv
+  elements: ${oc.env:PROJECT_ROOT}/data/perov/elements.json
   separate_test: False
-  batch_size: 16
+  batch_size: 2
   label_scaler:
     _target_: sklearn.preprocessing.StandardScaler
