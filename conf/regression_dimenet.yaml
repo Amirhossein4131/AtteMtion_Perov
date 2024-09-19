@@ -5,6 +5,7 @@ hydra:
 
 trainer:
   max_epochs: 5000
+  gpus: 1
   #accelerator: "cpu"
   #devices: 1
 

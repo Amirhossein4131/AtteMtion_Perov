@@ -3,6 +3,9 @@ import numpy as np
 import hydra
 import json
 import torch
+import ase
+from ase.io import read
+from io import StringIO
 from torch.utils.data import Dataset, random_split
 from torch_geometric.data import Data
 import pytorch_lightning as pl
@@ -44,24 +47,24 @@ class DimeNetDataModule(pl.LightningDataModule):
         data = pd.read_csv(dataset_csv, skipinitialspace=True)
         db = []
         for i in range(len(data)):
-            cif = data['cif'][i]
-            lines = cif.strip().split('\n')
+            cif = StringIO(data['cif'][i])
+            structure = read(cif, format="cif")
 
             # target (y)
             prop = data['dir_gap'][i]
 
             # fractional coordinates
-            frac_cords = np.array([line.split()[3:-1] for line in lines[26:]], dtype=float)
+            frac_cords = np.array(structure.get_scaled_positions(), dtype=float)
 
             # atom types and number of atoms
-            atom_types = [self.elements[line.split()[0]] for line in lines[26:]]
+            atom_types = structure.get_chemical_symbols()
             num_atoms = len(atom_types)
 
             # Angles
-            angles = np.array([line.split()[1] for line in lines[6:9]], dtype=float)
+            angles = np.array(structure.get_cell().angles(), dtype=float)
 
             # Lengths
-            lengths = np.array([line.split()[1] for line in lines[3:6]], dtype=float)
+            lengths = np.array(structure.get_cell().lengths(), dtype=float)
 
             data_point = Data(x=torch.tensor(frac_cords, dtype=torch.float32),
                               frac_coords=torch.tensor(frac_cords, dtype=torch.float32),
