@@ -57,7 +57,7 @@ class DimeNetDataModule(pl.LightningDataModule):
             frac_cords = np.array(structure.get_scaled_positions(), dtype=float)
 
             # atom types and number of atoms
-            atom_types = structure.get_chemical_symbols()
+            atom_types = [self.elements[i] for i in structure.get_chemical_symbols()]
             num_atoms = len(atom_types)
 
             # Angles
