@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch_scatter import scatter
 #from torch_geometric.nn.acts import swish
 from torch_geometric.nn.inits import glorot_orthogonal
-from torch_geometric.nn.models.dimenet import (
+from pl_modules.imports.dimenet.tg_code_dimenet import (
     BesselBasisLayer as BesselBasisLayer_pt1x,
     EmbeddingBlock,
     ResidualLayer,
