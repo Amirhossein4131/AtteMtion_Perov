@@ -1,0 +1,4 @@
+.env
+.idea
+hydra
+__pycache__**
