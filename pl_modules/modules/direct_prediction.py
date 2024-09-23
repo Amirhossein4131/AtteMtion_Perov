@@ -20,7 +20,7 @@ class MLPReadout(nn.Module):
             self.layers.append(nn.ReLU())
 
         self.layers.append(nn.Linear(hidden_dim, output_dim))
-        self.self.mlp = nn.Sequential(*self.layers)
+        self.mlp = nn.Sequential(*self.layers)
 
     def forward(self, x):
         return self.mlp(x)
