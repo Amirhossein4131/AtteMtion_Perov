@@ -27,8 +27,8 @@ class DimeNetDataModule(pl.LightningDataModule):
             self.elements = json.load(file)
 
         self.train = self.getdb(self, train_csv)
-        self.train_dataset = self.train[1000:2000]
-        self.test_dataset = self.train[:1000]
+        self.train_dataset = self.train[:11400]
+        self.test_dataset = self.train[11400:]
 
         # if separate_test:
         #     self.test_dataset = self.getdb(self, test_csv)

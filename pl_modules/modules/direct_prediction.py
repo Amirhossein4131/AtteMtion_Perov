@@ -5,6 +5,25 @@ from torch.optim.lr_scheduler import StepLR
 
 import torch.nn.functional as F
 from torch.optim import Adam
+from torch import nn
+
+
+class MLPReadout(nn.Module):
+    def __init__(self, input_dim, hidden_dim, output_dim, num_layers=2):
+        super(MLPReadout, self).__init__()
+        self.layers = []
+        self.layers.append(nn.Linear(input_dim, hidden_dim))
+        self.layers.append(nn.ReLU())
+
+        for _ in range(num_layers - 2):
+            self.layers.append(nn.Linear(hidden_dim, hidden_dim))
+            self.layers.append(nn.ReLU())
+
+        self.layers.append(nn.Linear(hidden_dim, output_dim))
+        self.self.mlp = nn.Sequential(*self.layers)
+
+    def forward(self, x):
+        return self.mlp(x)
 
 
 class GraphFeaturePredictor(pl.LightningModule):
